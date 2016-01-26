@@ -7,11 +7,11 @@
       create: function () {
         return supportXMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
       },
-      onreadystatechange: function (func, _xhr) {
-        _xhr.onreadystatechange = function () {
-          if (_xhr.readyState == 4) {
-            if (_xhr.status == 200) {
-              func(_xhr.responseText);
+      onreadystatechange: function (inCallback, inXhr) {
+        inXhr.onreadystatechange = function () {
+          if (inXhr.readyState == 4) {
+            if (inXhr.status == 200) {
+              inCallback(inXhr.responseText);
             }
           }
         }
