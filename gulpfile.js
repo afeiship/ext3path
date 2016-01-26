@@ -13,7 +13,10 @@
   });
 
   gulp.task('uglify', function () {
-    gulp.src(conf.src + '/*.js')
+    gulp.src([
+      conf.src + '/XMLHttpRequest.js',
+      conf.src + '/Ajax.js'
+    ])
       .pipe(uglify())
       .pipe(gulp.dest('dist'));
   });

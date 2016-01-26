@@ -1,20 +1,9 @@
 (function (nx, global) {
 
-  var supportXMLHttpRequest = !!global.XMLHttpRequest;
-
   var Ajax = nx.declare('nx.net.Ajax', {
     statics: {
       create: function () {
-        return supportXMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-      },
-      onreadystatechange: function (inCallback, inXhr) {
-        inXhr.onreadystatechange = function () {
-          if (inXhr.readyState == 4) {
-            if (inXhr.status == 200) {
-              inCallback(inXhr.responseText);
-            }
-          }
-        }
+        return new nx.net.XMLHttpRequest();
       }
     },
     methods: {
@@ -22,15 +11,25 @@
         this.xhr = Ajax.create();
       },
       get: function (inUrl, inCallback) {
-        this.xhr.open('get', inUrl);
+        this.xhr.open('GET', inUrl);
         this.onreadystatechange(inCallback, this.xhr);
         this.xhr.send(null);
       },
       post: function (inUrl, inData, inCallback) {
-        this.xhr.open('post', inUrl);
+        this.xhr.open('POST', inUrl);
         this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        Ajax.onreadystatechange(inCallback, this.xhr);
+        this.onreadystatechange(inCallback);
         this.xhr.send(inData);
+      },
+      onreadystatechange: function (inCallback) {
+        var xhr = this.xhr;
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              inCallback(xhr.responseText);
+            }
+          }
+        }
       }
     }
   });
