@@ -23,7 +23,7 @@
         this._complete = false;
         this.xhr = nx.net.XMLHttpRequest.getInstance();
       },
-      request: function (inUrl, inOptions) {
+      ajax: function (inUrl, inOptions) {
         this.normalizeOptions(inOptions);
         this.timeoutProcessor();
         this.headersProcessor();
@@ -40,15 +40,20 @@
         var options = this.options;
         var timeout = options.timeout;
         var xhr = this.xhr;
+        var response;
         if (timeout > 0) {
           this._abortTime = setTimeout(function () {
+            response = new AjaxResponse(xhr);
             xhr.onreadystatechange = $.noop;
             xhr.abort();
             options.error({
               code: AjaxConfig.ERROR_CODE.TIMEOUT,
               msg: 'timeout',
-              data: null
+              data: {
+                response: response
+              }
             });
+            options.complete(response);
           }, timeout);
         }
       },
@@ -58,10 +63,8 @@
       },
       dataProcessor: function () {
         var data = this.options.data;
-        var params = Ajax.toQueryString(data);
-        this._data = params;
+        this._data = Ajax.toQueryString(data);
       },
-
       stateEventProcessor: function (inCallback) {
         var xhr = this.xhr;
         var options = this.options;
@@ -92,31 +95,31 @@
         switch (method) {
           case 'GET':
           case 'POST':
-            this[method.toLowerCase()].call(this);
+            this['do' + method].call(this);
             break;
           default:
-            this.request.call(this);
+            this.doREQUEST.call(this);
             break;
         }
       },
-      get: function () {
+      doGET: function () {
         var options = this.options;
         var url = options.url;
         if (options.data) {
           url += url.indexOf('?') > -1 ? '&' : '?' + this._data;
         }
-        this.setHeader('Content-Type', this.options.contentType || AjaxConfig.CONTENT_TYPE.get);
+        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.get);
         this.xhr.open("GET", url, options.async);
         this.xhr.send(null);
       },
-      post: function () {
+      doPOST: function () {
         var options = this.options;
         var url = options.url;
         this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.post);
         this.xhr.open("POST", url, options.async);
         this.xhr.send(this._data);
       },
-      request: function () {
+      doREQUEST: function () {
         var options = this.options;
         this.xhr.open(options.method, options.url, options.async);
         this.xhr.send();
@@ -133,7 +136,7 @@
         return false;
       },
       setHeader: function (inKey, inValue) {
-        xhr.setRequestHeader(inKey, inValue);
+        this.xhr.setRequestHeader(inKey, inValue);
       },
       setHeaders: function (inObj) {
         var xhr = this.xhr;
