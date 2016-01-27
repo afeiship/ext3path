@@ -39,6 +39,7 @@
       request: function (inUrl, inOptions) {
         this.xhr = nx.net.XMLHttpRequest.getInstance();
         this.normalizeOptions(inUrl, inOptions);
+        this.dataProcessor();
         this.timeoutProcessor();
         this.headersProcessor();
         this.stateEventProcessor();
