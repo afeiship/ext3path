@@ -30,17 +30,6 @@
         this.stateEventProcessor();
         this.requestProcessor();
       },
-      get: function (inUrl, inCallback) {
-        this.xhr.open('GET', inUrl);
-        this.onreadystatechange(inCallback, this.xhr);
-        this.xhr.send(null);
-      },
-      post: function (inUrl, inData, inCallback) {
-        this.xhr.open('POST', inUrl);
-        this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        this.onreadystatechange(inCallback);
-        this.xhr.send(inData);
-      },
       normalizeOptions: function (inOptions) {
         var preProcessOptions = {
           method: (inOptions.method).toUpperCase()
@@ -103,14 +92,14 @@
         switch (method) {
           case 'GET':
           case 'POST':
-            this['do' + method].call(this);
+            this[method.toLowerCase()].call(this);
             break;
           default:
-            this.doREQUEST.call(this);
+            this.request.call(this);
             break;
         }
       },
-      doGET: function () {
+      get: function () {
         var options = this.options;
         var url = options.url;
         if (options.data) {
@@ -120,14 +109,14 @@
         this.xhr.open("GET", url, options.async);
         this.xhr.send(null);
       },
-      doPOST: function () {
+      post: function () {
         var options = this.options;
         var url = options.url;
         this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.post);
         this.xhr.open("POST", url, options.async);
         this.xhr.send(this._data);
       },
-      doREQUEST: function () {
+      request: function () {
         var options = this.options;
         this.xhr.open(options.method, options.url, options.async);
         this.xhr.send();

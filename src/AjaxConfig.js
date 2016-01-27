@@ -9,6 +9,7 @@
         timeout: -1,
         data: null,
         headers: {},
+        contentType:null,
         error: nx.noop,
         success: nx.noop,
         complete: nx.noop
