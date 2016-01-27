@@ -6,32 +6,47 @@
   var location = global.location;
 
   var Ajax = nx.declare('nx.net.Ajax', {
-    mixins: [
-      nx.net.AjaxProcessor
-    ],
     statics: {
       toQueryString: function (inJson) {
         return Object.keys(inJson).map(function (key) {
           return encodeURIComponent(key) + '=' +
             encodeURIComponent(inJson[key]);
         }).join('&');
+      },
+      request: function (inUrl, inOptions) {
+        Ajax.getInstance().request(inUrl, inOptions);
+      },
+      get: function (inUrl, inOptions) {
+        var options = nx.mix(inOptions, {
+          method: 'GET'
+        });
+        Ajax.getInstance().request(inUrl, options);
+      },
+      post: function (inUrl, inOptions) {
+        var options = nx.mix(inOptions, {
+          method: 'POST'
+        });
+        Ajax.getInstance().request(inUrl, options);
+      },
+      getInstance: function () {
+        if (!this._instance) {
+          this._instance = new Ajax();
+        }
+        return this._instance;
       }
     },
     methods: {
-      init: function () {
-        this._abortTime = null;
-        this._complete = false;
+      request: function (inUrl, inOptions) {
         this.xhr = nx.net.XMLHttpRequest.getInstance();
-      },
-      ajax: function (inUrl, inOptions) {
-        this.normalizeOptions(inOptions);
+        this.normalizeOptions(inUrl, inOptions);
         this.timeoutProcessor();
         this.headersProcessor();
         this.stateEventProcessor();
         this.requestProcessor();
       },
-      normalizeOptions: function (inOptions) {
+      normalizeOptions: function (inUrl, inOptions) {
         var preProcessOptions = {
+          url: inUrl,
           method: (inOptions.method).toUpperCase()
         };
         this.options = nx.mix(AjaxConfig.defaults, inOptions, preProcessOptions);
@@ -87,6 +102,8 @@
             options.complete(response);
             self._complete = true;
             self.xhr = null;
+            clearTimeout(self._abortTime);
+            self._abortTime = null;
           }
         }
       },
@@ -108,15 +125,15 @@
         if (options.data) {
           url += url.indexOf('?') > -1 ? '&' : '?' + this._data;
         }
-        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.get);
         this.xhr.open("GET", url, options.async);
+        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.get);
         this.xhr.send(null);
       },
       doPOST: function () {
         var options = this.options;
         var url = options.url;
-        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.post);
         this.xhr.open("POST", url, options.async);
+        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.post);
         this.xhr.send(this._data);
       },
       doREQUEST: function () {

@@ -5,7 +5,7 @@
       defaults: {
         method: 'GET',
         dataType: 'json',
-        async: false,
+        async: true,
         timeout: -1,
         data: null,
         headers: {},
