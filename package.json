@@ -2,7 +2,7 @@
   "name": "next-net-ajax",
   "version": "1.0.0",
   "description": "An ajax tool based on next toolkit.",
-  "main": "index.js",
+  "main": "dist/Ajax.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

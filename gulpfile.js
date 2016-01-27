@@ -17,6 +17,7 @@
   gulp.task('uglify', function () {
     gulp.src([
         conf.src + '/AjaxConfig.js',
+        conf.src + '/AjaxResponse.js',
         conf.src + '/XMLHttpRequest.js',
         conf.src + '/Ajax.js'
       ])
