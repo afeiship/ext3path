@@ -22,7 +22,7 @@
         conf.src + '/Ajax.js'
       ])
       .pipe(concat('Ajax.js'))
-      //.pipe(uglify())
+      .pipe(uglify())
       //.pipe(rename({
       //  extname: '.min.js'
       //}))
