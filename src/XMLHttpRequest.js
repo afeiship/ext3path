@@ -9,15 +9,13 @@
         return !!global.XMLHttpRequest;
       },
       normalize: function () {
-        if (this.exist()) {
+        if (!this.exist()) {
           global.XMLHttpRequest = function () {
             return new global.ActiveXObject(navigator.userAgent.indexOf('MSIE 5') >= 0 ? 'Microsoft.XMLHTTP' : 'Msxml2.XMLHTTP');
           };
         }
-      }
-    },
-    methods: {
-      init: function () {
+      },
+      getInstance: function () {
         return new global.XMLHttpRequest();
       }
     }
