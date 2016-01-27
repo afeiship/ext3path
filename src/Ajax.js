@@ -7,12 +7,6 @@
 
   var Ajax = nx.declare('nx.net.Ajax', {
     statics: {
-      toQueryString: function (inJson) {
-        return Object.keys(inJson).map(function (key) {
-          return encodeURIComponent(key) + '=' +
-            encodeURIComponent(inJson[key]);
-        }).join('&');
-      },
       request: function (inUrl, inOptions) {
         Ajax.getInstance().request(inUrl, inOptions);
       },
@@ -33,6 +27,12 @@
           this._instance = new Ajax();
         }
         return this._instance;
+      },
+      toQueryString: function (inJson) {
+        return Object.keys(inJson).map(function (key) {
+          return encodeURIComponent(key) + '=' +
+            encodeURIComponent(inJson[key]);
+        }).join('&');
       }
     },
     methods: {
