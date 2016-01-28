@@ -5,11 +5,12 @@
       defaults: {
         method: 'GET',
         dataType: 'json',
+        /*(async)Not support:false,Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check http://xhr.spec.whatwg.org/*/
         async: true,
         timeout: -1,
         data: null,
         headers: {},
-        contentType:null,
+        contentType: null,
         error: nx.noop,
         success: nx.noop,
         complete: nx.noop
