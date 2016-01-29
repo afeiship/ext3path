@@ -39,3 +39,37 @@
   });
 ```
 
++ customize your response:
+  + 1.get Ajax:
+  ```javascript
+    var Ajax = nx.net.Ajax;
+    nx.declare('demo.MyResponseClass', {
+      extend: nx.net.AjaxResponse,
+      methods: {
+        response: function () {
+          var base = this.base();
+          if (base.flag == 1) {
+            return base.data;
+          } else {
+            console.log(base.msg);
+          }
+        }
+      }
+    });
+  ```
+  + 2.config your project class:
+  ```javascript
+    Ajax.responseClass = demo.MyResponseClass;
+  ```
+  + 3.send request:
+  ```javascript
+    var url1 = 'data.php';
+    Ajax.post(url1, {
+      data: {
+        id: 1
+      },
+      success: function (resp) {
+        console.log('first:->', resp.response());
+      }
+    });
+  ```
