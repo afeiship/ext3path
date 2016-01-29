@@ -40,7 +40,7 @@
 ```
 
 + customize your response:
-  + 1.get Ajax:
+  + 1.get Ajax && define your owen config class(extends system class):
   ```javascript
     var Ajax = nx.net.Ajax;
     nx.declare('demo.MyResponseClass', {
