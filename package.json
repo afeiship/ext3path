@@ -1,6 +1,6 @@
 {
   "name": "next-net-ajax",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An ajax tool based on next toolkit.",
   "main": "dist/Ajax.js",
   "scripts": {
