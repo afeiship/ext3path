@@ -11,6 +11,7 @@
         data: null,
         headers: {},
         contentType: null,
+        context:null,
         error: nx.noop,
         success: nx.noop,
         complete: nx.noop
@@ -28,7 +29,7 @@
       },
       CONTENT_TYPE: {
         get: 'text/plain;charset=UTF-8',
-        post: 'application/x-www-form-urlencoded;charset=UTF-8'
+        post: 'application/json;charset=UTF-8'
       }
     }
   });

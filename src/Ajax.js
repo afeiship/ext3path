@@ -56,20 +56,14 @@
         var options = this.options;
         var timeout = options.timeout;
         var xhr = this.xhr;
+        var self = this;
         var response;
         if (timeout > 0) {
           this._abortTime = setTimeout(function () {
             response = new AjaxResponse(xhr);
-            xhr.onreadystatechange = $.noop;
+            xhr.onreadystatechange = nx.noop;
             xhr.abort();
-            options.error({
-              code: AjaxConfig.ERROR_CODE.TIMEOUT,
-              msg: 'timeout',
-              data: {
-                response: response
-              }
-            });
-            options.complete(response);
+            self.onError('timeout', response);
           }, timeout);
         }
       },
@@ -79,9 +73,9 @@
       },
       dataProcessor: function () {
         var data = this.options.data;
-        this._data = Ajax.toQueryString(data);
+        this._data = JSON.stringify(data);
       },
-      stateEventProcessor: function (inCallback) {
+      stateEventProcessor: function () {
         var xhr = this.xhr;
         var options = this.options;
         var response;
@@ -90,18 +84,10 @@
           if (xhr.readyState === AjaxConfig.READY_STATE.DONE) {
             response = new AjaxResponse(xhr, options);
             if (self.requestSuccess()) {
-              options.success(response);
+              self.onSuccess(response);
             } else {
-              options.error({
-                code: AjaxConfig.ERROR_CODE.REQUEST,
-                msg: 'request',
-                data: {
-                  response: response
-                }
-              });
+              self.onError('error', response);
             }
-            options.complete(response);
-            self._complete = true;
             self.xhr = null;
             clearTimeout(self._abortTime);
             self._abortTime = null;
@@ -161,6 +147,20 @@
         nx.each(inObj, function (inValue, inKey) {
           xhr.setRequestHeader(inKey, inValue);
         });
+      },
+      onSuccess: function (inResponse) {
+        var options = this.options;
+        options.success.call(options.context, inResponse, this.xhr);
+        this.onComplete('success', inResponse);
+      },
+      onError: function (inStatus, inResponse) {
+        var options = this.options;
+        options.error.call(options.context, inStatus, inResponse, this.xhr);
+        this.onComplete(inStatus, inResponse);
+      },
+      onComplete: function (inStatus, inResponse) {
+        var options = this.options;
+        options.complete.call(options.context, inStatus, inResponse, this.xhr);
       }
     }
   });

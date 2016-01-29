@@ -7,6 +7,7 @@
           if (this._dataType === 'text') {
             return this.xhr.responseText;
           }
+          return null;
         }
       },
       responseJSON: {
@@ -30,6 +31,9 @@
         this.xhr = inXhr;
         this.options = inOptions;
         this._dataType = this.options.dataType;
+      },
+      response: function () {
+        return this.responseJSON() || this.responseText() || this.responseXML();
       }
     }
   });

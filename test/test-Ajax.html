@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
 
   <script type="text/javascript" src="../bower_components/next-js-core/dest/nx.core.js"></script>
   <script type="text/javascript" src="../dist/Ajax.js"></script>
 </head>
 <body>
+
+<script type="text/javascript">
+  var Ajax = nx.net.Ajax;
+  var url1 = 'http://192.168.10.55:8080/activity/phh/selectPhhGoodsDetailJson';
+  Ajax.post(url1, {
+    data: {
+      goodsId: "25"
+    },
+    success: function (resp) {
+      console.log(resp.response());
+    }
+  })
+</script>
+
 </body>
 </html>
