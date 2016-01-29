@@ -57,7 +57,7 @@
       }
     });
   ```
-  + 2.config your project class:
+  + 2.config your project ajax response class:
   ```javascript
     Ajax.responseClass = demo.MyResponseClass;
   ```
