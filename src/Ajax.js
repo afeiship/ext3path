@@ -1,12 +1,12 @@
 (function (nx, global) {
 
-  var AjaxConfig = nx.net.AjaxConfig;
-  var AjaxResponse = nx.net.AjaxResponse;
   var navigator = global.navigator;
   var location = global.location;
 
   var Ajax = nx.declare('nx.net.Ajax', {
     statics: {
+      configClass: nx.net.AjaxConfig,
+      responseClass: nx.net.AjaxResponse,
       request: function (inUrl, inOptions) {
         Ajax.getInstance().request(inUrl, inOptions);
       },
@@ -23,10 +23,8 @@
         Ajax.getInstance().request(inUrl, options);
       },
       getInstance: function () {
-        if (!this._instance) {
-          this._instance = new Ajax();
-        }
-        return this._instance;
+        //todo:optimize multi ajax condition:
+        return new Ajax();
       },
       toQueryString: function (inJson) {
         return Object.keys(inJson).map(function (key) {
@@ -41,7 +39,6 @@
         this.normalizeOptions(inUrl, inOptions);
         this.dataProcessor();
         this.timeoutProcessor();
-        this.headersProcessor();
         this.stateEventProcessor();
         this.requestProcessor();
       },
@@ -50,7 +47,7 @@
           url: inUrl,
           method: (inOptions.method).toUpperCase()
         };
-        this.options = nx.mix(AjaxConfig.defaults, inOptions, preProcessOptions);
+        this.options = nx.mix({}, Ajax.configClass.defaults, inOptions, preProcessOptions);
       },
       timeoutProcessor: function () {
         var options = this.options;
@@ -60,7 +57,7 @@
         var response;
         if (timeout > 0) {
           this._abortTime = setTimeout(function () {
-            response = new AjaxResponse(xhr);
+            response = new Ajax.responseClass(xhr, self.options);
             xhr.onreadystatechange = nx.noop;
             xhr.abort();
             self.onError('timeout', response);
@@ -68,7 +65,11 @@
         }
       },
       headersProcessor: function () {
-        var headers = this.options.headers;
+        var options = this.options;
+        var method = options.method;
+        var headers = nx.mix(options.headers, {
+          'Content-Type': options.contentType || Ajax.configClass.CONTENT_TYPE[method]
+        });
         this.setHeaders(headers);
       },
       dataProcessor: function () {
@@ -81,8 +82,8 @@
         var response;
         var self = this;
         xhr.onreadystatechange = function () {
-          if (xhr.readyState === AjaxConfig.READY_STATE.DONE) {
-            response = new AjaxResponse(xhr, options);
+          if (xhr.readyState === Ajax.configClass.READY_STATE.DONE) {
+            response = new Ajax.responseClass(xhr, options);
             if (self.requestSuccess()) {
               self.onSuccess(response);
             } else {
@@ -113,14 +114,14 @@
           url += url.indexOf('?') > -1 ? '&' : '?' + this._data;
         }
         this.xhr.open("GET", url, options.async);
-        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.get);
+        this.headersProcessor();
         this.xhr.send(null);
       },
       doPOST: function () {
         var options = this.options;
         var url = options.url;
         this.xhr.open("POST", url, options.async);
-        this.setHeader('Content-Type', options.contentType || AjaxConfig.CONTENT_TYPE.post);
+        this.headersProcessor();
         this.xhr.send(this._data);
       },
       doREQUEST: function () {
@@ -150,17 +151,17 @@
       },
       onSuccess: function (inResponse) {
         var options = this.options;
-        options.success.call(options.context, inResponse, this.xhr);
+        options.success.call(options.context, inResponse);
         this.onComplete('success', inResponse);
       },
       onError: function (inStatus, inResponse) {
         var options = this.options;
-        options.error.call(options.context, inStatus, inResponse, this.xhr);
+        options.error.call(options.context, inStatus, inResponse);
         this.onComplete(inStatus, inResponse);
       },
       onComplete: function (inStatus, inResponse) {
         var options = this.options;
-        options.complete.call(options.context, inStatus, inResponse, this.xhr);
+        options.complete.call(options.context, inStatus, inResponse);
       }
     }
   });

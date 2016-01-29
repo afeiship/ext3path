@@ -2,6 +2,7 @@
 
 ##description:
 + Ajax mini library based on next toolkit.
++ configClass/responseClass configurable.
 
 ##usage:
 + request:

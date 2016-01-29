@@ -28,8 +28,8 @@
         REQUEST: 1001
       },
       CONTENT_TYPE: {
-        get: 'text/plain;charset=UTF-8',
-        post: 'application/json;charset=UTF-8'
+        GET: 'text/plain;charset=UTF-8',
+        POST: 'application/json;charset=UTF-8'
       }
     }
   });

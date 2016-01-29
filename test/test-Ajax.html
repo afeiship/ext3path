@@ -11,15 +11,34 @@
 
 <script type="text/javascript">
   var Ajax = nx.net.Ajax;
+
+
+  //post:
   var url1 = 'http://192.168.10.55:8080/activity/phh/selectPhhGoodsDetailJson';
   Ajax.post(url1, {
     data: {
       goodsId: "25"
     },
     success: function (resp) {
-      console.log(resp.response());
+      console.log('first:->',resp.response());
     }
-  })
+  });
+
+
+  Ajax.request(url1, {
+    method:'POST',
+    data: {
+      goodsId: "25"
+    },
+    success: function (resp) {
+      console.log('second:->',resp.response());
+    }
+  });
+
+
+
+
+
 </script>
 
 </body>
