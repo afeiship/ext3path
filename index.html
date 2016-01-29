@@ -27,6 +27,7 @@
 
 <ul>
 <li>Ajax mini library based on next toolkit.</li>
+<li>configClass/responseClass configurable.</li>
 </ul>
 
 <h2>
@@ -68,6 +69,50 @@
       <span class="pl-en">console</span>.<span class="pl-c1">log</span>(inResp);
     }
   });</pre></div>
+
+<ul>
+<li>customize your response:
+
+<ul>
+<li>1.get Ajax &amp;&amp; define your owen config class(extends system class):</li>
+</ul>
+
+<div class="highlight highlight-source-js"><pre>  <span class="pl-k">var</span> Ajax <span class="pl-k">=</span> <span class="pl-smi">nx</span>.<span class="pl-smi">net</span>.<span class="pl-smi">Ajax</span>;
+  <span class="pl-smi">nx</span>.<span class="pl-c1">declare</span>(<span class="pl-s"><span class="pl-pds">'</span>demo.MyResponseClass<span class="pl-pds">'</span></span>, {
+    extend<span class="pl-k">:</span> <span class="pl-smi">nx</span>.<span class="pl-smi">net</span>.<span class="pl-smi">AjaxResponse</span>,
+    methods<span class="pl-k">:</span> {
+      <span class="pl-en">response</span><span class="pl-k">:</span> <span class="pl-k">function</span> () {
+        <span class="pl-k">var</span> base <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-en">base</span>();
+        <span class="pl-k">if</span> (<span class="pl-smi">base</span>.<span class="pl-smi">flag</span> <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+          <span class="pl-k">return</span> <span class="pl-smi">base</span>.<span class="pl-c1">data</span>;
+        } <span class="pl-k">else</span> {
+          <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-smi">base</span>.<span class="pl-smi">msg</span>);
+        }
+      }
+    }
+  });</pre></div>
+
+<ul>
+<li>2.config your project ajax response class:</li>
+</ul>
+
+<div class="highlight highlight-source-js"><pre>  <span class="pl-smi">Ajax</span>.<span class="pl-smi">responseClass</span> <span class="pl-k">=</span> <span class="pl-smi">demo</span>.<span class="pl-smi">MyResponseClass</span>;</pre></div>
+
+<ul>
+<li>3.send request:</li>
+</ul>
+
+<div class="highlight highlight-source-js"><pre>  <span class="pl-k">var</span> url1 <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>data.php<span class="pl-pds">'</span></span>;
+  <span class="pl-smi">Ajax</span>.<span class="pl-en">post</span>(url1, {
+    data<span class="pl-k">:</span> {
+      id<span class="pl-k">:</span> <span class="pl-c1">1</span>
+    },
+    <span class="pl-en">success</span><span class="pl-k">:</span> <span class="pl-k">function</span> (<span class="pl-smi">resp</span>) {
+      <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>first:-&gt;<span class="pl-pds">'</span></span>, <span class="pl-smi">resp</span>.<span class="pl-en">response</span>());
+    }
+  });</pre></div>
+</li>
+</ul>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/afeiship/next-net-ajax">Next-net-ajax</a> is maintained by <a href="https://github.com/afeiship">afeiship</a>.</span>
