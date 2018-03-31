@@ -1,10 +1,10 @@
-#next-net-ajax
+# next-net-ajax
 
-##description:
+## description:
 + Ajax mini library based on next toolkit.
 + configClass/responseClass configurable.
 
-##usage:
+## usage:
 + request:
 ```javascript
   var Ajax=nx.net.Ajax;
