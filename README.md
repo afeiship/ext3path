@@ -15,7 +15,10 @@ npm install @jswork/ext3path
 ```js
 import ext3path from '@jswork/ext3path';
 
-// usage goes here.
+const workpath = 'wxcomponents/antui/lib/tag/index';
+const res = ext3path(workpath);
+
+// res -> ["wxcomponents", "antui/lib/tag", "index"]
 ```
 
 ## license
