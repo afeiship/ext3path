@@ -1,6 +1,6 @@
 {
   "name": "@jswork/ext3path",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extracts first, mid (array), and last segments from a file path, enabling swift parsing with support for array mid-sections.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -51,5 +51,10 @@
       ],
       "@babel/preset-typescript"
     ]
-  }
+  },
+  "keywords": [
+    "extract",
+    "path",
+    "split"
+  ]
 }
