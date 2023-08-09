@@ -1,75 +1,34 @@
-# next-net-ajax
+# ext3path
+> Extracts first, mid (array), and last segments from a file path, enabling swift parsing with support for array mid-sections.
 
-## description:
-+ Ajax mini library based on next toolkit.
-+ configClass/responseClass configurable.
+[![version][version-image]][version-url]
+[![license][license-image]][license-url]
+[![size][size-image]][size-url]
+[![download][download-image]][download-url]
 
-## usage:
-+ request:
-```javascript
-  var Ajax=nx.net.Ajax;
-  Ajax.request('test.php',{
-    method:'GET',
-    data:{
-      name:'test'
-    }
-  });
+## installation
+```shell
+npm install @jswork/ext3path
 ```
 
-+ post:
-```javascript
-  var Ajax=nx.net.Ajax;
-  Ajax.post('test.php',{
-    data:{
-      name:'test'
-    }
-  });
+## usage
+```js
+import ext3path from '@jswork/ext3path';
+
+// usage goes here.
 ```
 
-+ get:
-```javascript
-  var Ajax=nx.net.Ajax;
-  Ajax.get('test.php',{
-    data:{
-      name:'test'
-    },
-    success:function(inResp){
-      console.log(inResp);
-    }
-  });
-```
+## license
+Code released under [the MIT license](https://github.com/afeiship/ext3path/blob/master/LICENSE.txt).
 
-+ customize your response:
-  + 1.get Ajax && define your owen config class(extends system class):
-  ```javascript
-    var Ajax = nx.net.Ajax;
-    nx.declare('demo.MyResponseClass', {
-      extend: nx.net.AjaxResponse,
-      methods: {
-        response: function () {
-          var base = this.base();
-          if (base.flag == 1) {
-            return base.data;
-          } else {
-            console.log(base.msg);
-          }
-        }
-      }
-    });
-  ```
-  + 2.config your project ajax response class:
-  ```javascript
-    Ajax.responseClass = demo.MyResponseClass;
-  ```
-  + 3.send request:
-  ```javascript
-    var url1 = 'data.php';
-    Ajax.post(url1, {
-      data: {
-        id: 1
-      },
-      success: function (resp) {
-        console.log('first:->', resp.response());
-      }
-    });
-  ```
+[version-image]: https://img.shields.io/npm/v/@jswork/ext3path
+[version-url]: https://npmjs.org/package/@jswork/ext3path
+
+[license-image]: https://img.shields.io/npm/l/@jswork/ext3path
+[license-url]: https://github.com/afeiship/ext3path/blob/master/LICENSE.txt
+
+[size-image]: https://img.shields.io/bundlephobia/minzip/@jswork/ext3path
+[size-url]: https://github.com/afeiship/ext3path/blob/master/dist/ext3path.min.js
+
+[download-image]: https://img.shields.io/npm/dm/@jswork/ext3path
+[download-url]: https://www.npmjs.com/package/@jswork/ext3path

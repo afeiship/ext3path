@@ -1,34 +1,9 @@
-(function () {
+const gulp = require('gulp');
+const { CleanRegistry, TsScripts } = require('@jswork/gulp-registry');
 
-  var gulp = require('gulp');
-  var del = require('del');
-  var concat = require('gulp-concat');
-  var rename = require('gulp-rename');
-  var uglify = require('gulp-uglify');
-  var conf = {
-    src: 'src',
-    dist: 'dist'
-  };
+const task1 = new CleanRegistry();
+const task2 = new TsScripts();
 
-  gulp.task('clean', function () {
-    del(conf.dist);
-  });
+[task1, task2].forEach(gulp.registry);
 
-  gulp.task('uglify', function () {
-    gulp.src([
-        conf.src + '/AjaxConfig.js',
-        conf.src + '/AjaxResponse.js',
-        conf.src + '/XMLHttpRequest.js',
-        conf.src + '/Ajax.js'
-      ])
-      .pipe(concat('Ajax.js'))
-      //.pipe(uglify())
-      //.pipe(rename({
-      //  extname: '.min.js'
-      //}))
-      .pipe(gulp.dest('dist'));
-  });
-
-  gulp.task('default', ['clean', 'uglify']);
-
-}());
+gulp.task('default', gulp.series(['clean', 'ts:scripts']));
